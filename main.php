@@ -15,8 +15,9 @@
 				<div class="container">
                         <form method="POST" action=#>
                         <div>
-                        <input type="submit" value="Exportar">
+                        <input type="submit" value="Exportar" name="json">
                         <input type="button" value="Excluir" onclick="exclude()">
+                        <input type="hidden" name="hid" id="hid">
                         <br><br>
                         </div>
                         <textarea id="chatmsg" name="chatmsg" disabled rows="15" ></textarea>
@@ -35,8 +36,10 @@
 <script>
 var countA = 0;
 var countC = 0;
-var ultimo;
 var countGeral = 0;
+var ultimo;
+var valororiginal = document.querySelector("#chatmsg").value;
+
 function click_atendente()
 {
     countA++;
@@ -44,13 +47,16 @@ function click_atendente()
     var atray = [''];
     var msgatd = document.querySelector("#msgatd").value;
     atray[countA]="Atendente:"+msgatd;
+    valororiginal = document.querySelector("#chatmsg").value;
     var valorr = document.querySelector("#chatmsg").value+"\n";
     document.querySelector("#chatmsg").value =  valorr +atray[countA]+"\n";
+    document.querySelector("#hid").value = document.querySelector("#chatmsg").value;
+    document.querySelector("#msgatd").value = "";
     if(countA>countC)
     {
         ultimo="atendente";
     }
-    return atray[countA];
+    
 }
 function click_cliente()
 {
@@ -59,24 +65,49 @@ function click_cliente()
     var ctray = ['']
     var msgcon = document.querySelector("#msgcon").value;
     ctray[countC]="Consumidor:"+msgcon;
+    valororiginal = document.querySelector("#chatmsg").value;
     var valor = document.querySelector("#chatmsg").value+"\n";
     document.querySelector("#chatmsg").value =  valor +ctray[countC]+"\n";
+    document.querySelector("#hid").value = document.querySelector("#chatmsg").value;
     document.querySelector("#msgcon").value = "";
     
     if(countC>countA)
     {
         ultimo="cliente";
     }
-    return ctray;
+    
 }
 function exclude()
 {
+    
     if(ultimo=="cliente")
     {
-        
-        
-        
-        
+        if(countC=1 && countA<0 || countC<0)
+        {
+            document.querySelector("#chatmsg").value = " ";
+            document.querySelector("#hid").value = document.querySelector("#chatmsg").value;
+        }
+        else
+        {
+            document.querySelector("#chatmsg").value = valororiginal;
+            document.querySelector("#hid").value = document.querySelector("#chatmsg").value;
+            countC--;
+           
+        }
+    }
+    else{
+        if(countA=1 && countC<0 || countA<0)
+        {
+            document.querySelector("#chatmsg").value = '';
+            document.querySelector("#hid").value = document.querySelector("#chatmsg").value;
+        }
+        else
+        {
+            document.querySelector("#chatmsg").value = valororiginal;
+            document.querySelector("#hid").value = document.querySelector("#chatmsg").value;
+            countA --;
+           
+        }
         
     }
 }
@@ -85,17 +116,18 @@ function exclude()
 
 
 <?php
-if(isset($_POST['chatstt'])){
+if(isset($_POST['json']))
+{
+ $chat = $_POST['hid'];
+ $exp = explode('\r',$chat);
+ $j =json_encode($exp);
+ echo $j;
+ $file = fopen("registrodechat.json","w");
+ fwrite($file,$j);
+ echo "Texto salvo com sucesso";
+    
 
-    $nome=$_POST['nome1'];
-
-    echo "Olá, $nome";
-
-    echo "<script>document.getElementById('questn').textContent = 'Teste nova questao';</script>";
-    }
-
-
-
+}
 ?>
 
 </html>
