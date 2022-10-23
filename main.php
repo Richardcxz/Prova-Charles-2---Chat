@@ -13,18 +13,17 @@
 		<div class="wrapper">
 			<h2>SAC</h2>
 				<div class="container">
-                        
                         <form method="POST" action=#>
                         <div>
                         <input type="submit" value="Exportar">
-                        <input type="submit" value="Excluir">
+                        <input type="button" value="Excluir" onclick="exclude()">
                         <br><br>
                         </div>
                         <textarea id="chatmsg" name="chatmsg" disabled rows="15" ></textarea>
                         </form>
                         <br>
 						<label style="color: black;">Atendente: </label>
-						<input type="text" name="msgatd" placeholder="" type="text" style="width: 50%;">  <button onclick="click_atendente()">OK</button> <br>
+						<input type="text" name="msgatd" id="msgatd"placeholder="" type="text" style="width: 50%;">  <button onclick="click_atendente()">OK</button> <br>
 						<label style="color: black;">Consumidor: </label>
 						<input type="text" name="msgcon" id="msgcon" placeholder="" type="text" style="width: 50%;">  <button onclick="click_cliente()">OK</button><br>
 						
@@ -36,23 +35,52 @@
 <script>
 var countA = 0;
 var countC = 0;
+var ultimo;
+var countGeral = 0;
 function click_atendente()
 {
     countA++;
- var atray = [''];
- var msgatd = document.getElementsByName("msgatd");
- console.log(countA);
+    countGeral++;
+    var atray = [''];
+    var msgatd = document.querySelector("#msgatd").value;
+    atray[countA]="Atendente:"+msgatd;
+    var valorr = document.querySelector("#chatmsg").value+"\n";
+    document.querySelector("#chatmsg").value =  valorr +atray[countA]+"\n";
+    if(countA>countC)
+    {
+        ultimo="atendente";
+    }
+    return atray[countA];
 }
 function click_cliente()
 {
     countC++;
+    countGeral++;
     var ctray = ['']
     var msgcon = document.querySelector("#msgcon").value;
-    ctray[countC]=msgcon;
-    var valor = document.querySelector("#chatmsg").value + "\n";
-    document.querySelector("#chatmsg").value = valor +""+ctray[countC];
-    console.log(ctray[countC]);
+    ctray[countC]="Consumidor:"+msgcon;
+    var valor = document.querySelector("#chatmsg").value+"\n";
+    document.querySelector("#chatmsg").value =  valor +ctray[countC]+"\n";
+    document.querySelector("#msgcon").value = "";
+    
+    if(countC>countA)
+    {
+        ultimo="cliente";
+    }
+    return ctray;
 }
+function exclude()
+{
+    if(ultimo=="cliente")
+    {
+        
+        
+        
+        
+        
+    }
+}
+
 </script>
 
 
